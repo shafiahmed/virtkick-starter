@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+var path = require('path');
+
+process.env.PORT = process.env.PORT || 3000;
+process.env.RAILS_PORT = process.env.RAILS_PORT || 60000;
+process.env.RAILS_HOST = "localhost";
+
+require('./webapp/master');
+
+var child_process = require('child_process');
+
+var spawn = child_process.spawn;
+
+var split = require('split');
+
+var webappPath = process.env.WEBAPP_PATH || path.join(__dirname, 'webapp');
+
+var backendPath = process.env.BACKEND_PATH || path.join(__dirname, 'backend');
+
+var rails = spawn('bundle', ['exec', 'rails', 's', '-p', process.env.RAILS_PORT], {
+  cwd: path.join(__dirname, 'webapp')
+});
+
+function bindOutput(proc, label) {
+  proc.stdout.pipe(split()).on('data', function(line) { process.stdout.write('['+label+'] ' + line + '\n') });
+  proc.stderr.pipe(split()).on('data', function(line) { process.stderr.write('['+label+'] ' + line + '\n') });
+  proc.on('error', process.exit);
+}
+bindOutput(rails, 'rails');
+
+var workerN = 0;
+function createWorker() {
+  var worker = spawn('bundle', ['exec', 'rake', 'jobs:work'], {
+    cwd: webappPath
+  });
+  bindOutput(worker, 'work' + workerN);
+  workerN += 1;
+  return worker;
+}
+
+var workerCount = process.env.WORKER_COUNT || 2;
+workerCount = Math.min(require('os').cpus().length, Math.max(workerCount, 1));
+
+for(var i = 0;i < workerCount;++i) {
+  createWorker();
+}
+
+
+var backend = spawn(process.env.PATH_TO_PYTHON || 'python', ['manage.py', 'runserver'], {
+  cwd: backendPath
+});
+bindOutput(backend, 'virtm');
