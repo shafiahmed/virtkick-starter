@@ -34,6 +34,8 @@ if(argv.p) {
   if(argv.d) {
     env.PRODUCTION_DEBUG = '1';
   }
+  env.SECRET_KEY_BASE = 'x';
+  env.DEVISE_SECRET_KEY = 'x';
 } else if(argv.d) {
   env.RAILS_ENV = 'development';
 }
@@ -51,11 +53,31 @@ env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'ISO');
 mkdirp.sync(env.HDD_DIR);
 mkdirp.sync(env.ISO_DIR);
 
+function spawn(name, arguments, options) {
+  chSpawn = child_process.spawn;
+
+  var proc = chSpawn(name, arguments, options)
+  var exitHandler = function() {
+    proc.kill('SIGKILL');
+  };
+  proc.once('exit', function() {
+    process.removeListener('exit', exitHandler);
+  });
+  process.on('exit', exitHandler);
+  process.once('SIGINT', function() {
+    exitHandler();
+    process.exit();
+  });
+  return proc;
+}
+
+
+
+
+
 require('./webapp/master');
 
 var child_process = require('child_process');
-
-var spawn = child_process.spawn;
 
 var split = require('split');
 
@@ -73,7 +95,10 @@ function bindOutput(proc, label, exitCb) {
   proc.stderr.pipe(split()).on('data', function(line) { process.stderr.write('['+label+'] ' + line + '\n') });
   proc.on('error', process.exit);
   if(exitCb) {
-    proc.on('exit', exitCb);
+    proc.on('exit', function(code) {
+      console.log("Process", label, "exit:", code);
+      exitCb(code);
+    });
   }
 }
 
@@ -84,7 +109,7 @@ function runEverything() {
     env: env
   });
 
-  bindOutput(rails, 'rails');
+  bindOutput(rails, 'rails', process.exit);
 
   var workerN = 0;
   function createWorker() {
@@ -92,7 +117,7 @@ function runEverything() {
       cwd: webappDir,
       env: env
     });
-    bindOutput(worker, 'work' + workerN);
+    bindOutput(worker, 'work' + workerN, process.exit);
     workerN += 1;
     return worker;
   }
@@ -109,7 +134,7 @@ function runEverything() {
     cwd: backendDir,
     env: env
   });
-  bindOutput(backend, 'virtm');
+  bindOutput(backend, 'virtm', process.exit);
 }
 
 var tasks = [];
@@ -124,6 +149,17 @@ if(argv.m) {
   });
 }
 
+if(argv.c) {
+  tasks.push(function(cb) {
+    var migrate = spawn('bundle', ['exec', 'rake', 'assets:clean'], {
+      cwd: webappDir,
+      env: env
+    });
+    bindOutput(migrate, 'assets:clean', cb);
+  });
+}
+
+
 if(argv.a) {
   tasks.push(function(cb) {
     var migrate = spawn('bundle', ['exec', 'rake', 'assets:precompile'], {
@@ -134,5 +170,10 @@ if(argv.a) {
   });
 }
 
-async.series(tasks, runEverything);
+async.parallel(tasks, function(err) {
+  if(err) {
+    return console.log("One of required tasks has failed")
+  }
+  runEverything();
+});
 
