@@ -1,10 +1,55 @@
 #!/usr/bin/env node
 
 var path = require('path');
+var mkdirp = require('mkdirp');
 
-process.env.PORT = process.env.PORT || 3000;
-process.env.RAILS_PORT = process.env.RAILS_PORT || 60000;
-process.env.RAILS_HOST = "localhost";
+var yargs = require('yargs');
+var async = require('async');
+
+var argv = yargs
+.alias('h', 'help')
+.describe('h', 'show help')
+.alias('d', 'development')
+.describe('d', 'run in development mode')
+.alias('m', 'migrate-db')
+.describe('m', 'migrate database before running')
+.alias('a', 'prepare-assets')
+.describe('a', 'prepare assets before running (goes with production run)')
+.alias('p', 'production')
+.describe('p', 'run in production mode (add also -d to have production debug)')
+.argv;
+
+if(argv.h) {
+  return yargs.showHelp();
+}
+
+if(!argv.d && !argv.p) {
+  return yargs.showHelp();
+}
+
+var env = process.env;
+
+if(argv.p) {
+  env.RAILS_ENV = 'production';
+  if(argv.d) {
+    env.PRODUCTION_DEBUG = '1';
+  }
+} else if(argv.d) {
+  env.RAILS_ENV = 'development';
+}
+
+
+var BASE_DIR = env.BASE_DIR || __dirname;
+
+env.PORT = env.PORT || 3000;
+env.RAILS_PORT = env.RAILS_PORT || 60000;
+env.RAILS_HOST = "localhost";
+
+env.HDD_DIR = env.HDD_DIR || path.join(BASE_DIR, 'HDD');
+env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'ISO');
+
+mkdirp.sync(env.HDD_DIR);
+mkdirp.sync(env.ISO_DIR);
 
 require('./webapp/master');
 
@@ -14,40 +59,80 @@ var spawn = child_process.spawn;
 
 var split = require('split');
 
-var webappPath = process.env.WEBAPP_PATH || path.join(__dirname, 'webapp');
+var webappDir = env.WEBAPP_DIR || path.join(BASE_DIR, 'webapp');
+var backendDir = env.BACKEND_DIR || path.join(BASE_DIR, 'backend');
 
-var backendPath = process.env.BACKEND_PATH || path.join(__dirname, 'backend');
 
-var rails = spawn('bundle', ['exec', 'rails', 's', '-p', process.env.RAILS_PORT], {
-  cwd: path.join(__dirname, 'webapp')
-});
+console.log("RAILS_ENV=" + env.RAILS_ENV);
+console.log("webapp location:", webappDir);
+console.log("backend location:", backendDir);
 
-function bindOutput(proc, label) {
+
+function bindOutput(proc, label, exitCb) {
   proc.stdout.pipe(split()).on('data', function(line) { process.stdout.write('['+label+'] ' + line + '\n') });
   proc.stderr.pipe(split()).on('data', function(line) { process.stderr.write('['+label+'] ' + line + '\n') });
   proc.on('error', process.exit);
+  if(exitCb) {
+    proc.on('exit', exitCb);
+  }
 }
-bindOutput(rails, 'rails');
 
-var workerN = 0;
-function createWorker() {
-  var worker = spawn('bundle', ['exec', 'rake', 'jobs:work'], {
-    cwd: webappPath
+function runEverything() {
+
+  var rails = spawn('bundle', ['exec', 'rails', 's', '-p', env.RAILS_PORT], {
+    cwd: webappDir,
+    env: env
   });
-  bindOutput(worker, 'work' + workerN);
-  workerN += 1;
-  return worker;
+
+  bindOutput(rails, 'rails');
+
+  var workerN = 0;
+  function createWorker() {
+    var worker = spawn('bundle', ['exec', 'rake', 'jobs:work'], {
+      cwd: webappDir,
+      env: env
+    });
+    bindOutput(worker, 'work' + workerN);
+    workerN += 1;
+    return worker;
+  }
+
+  var workerCount = env.WORKER_COUNT || 2;
+  workerCount = Math.min(require('os').cpus().length, Math.max(workerCount, 1));
+
+  for(var i = 0;i < workerCount;++i) {
+    createWorker();
+  }
+
+
+  var backend = spawn(env.PATH_TO_PYTHON || 'python2', ['manage.py', 'runserver'], {
+    cwd: backendDir,
+    env: env
+  });
+  bindOutput(backend, 'virtm');
 }
 
-var workerCount = process.env.WORKER_COUNT || 2;
-workerCount = Math.min(require('os').cpus().length, Math.max(workerCount, 1));
+var tasks = [];
 
-for(var i = 0;i < workerCount;++i) {
-  createWorker();
+if(argv.m) {
+  tasks.push(function(cb) {
+    var migrate = spawn('bundle', ['exec', 'rake', 'db:migrate'], {
+      cwd: webappDir,
+      env: env
+    });
+    bindOutput(migrate, 'migrate', cb);
+  });
 }
 
+if(argv.a) {
+  tasks.push(function(cb) {
+    var migrate = spawn('bundle', ['exec', 'rake', 'assets:precompile'], {
+      cwd: webappDir,
+      env: env
+    });
+    bindOutput(migrate, 'assets', cb);
+  });
+}
 
-var backend = spawn(process.env.PATH_TO_PYTHON || 'python', ['manage.py', 'runserver'], {
-  cwd: backendPath
-});
-bindOutput(backend, 'virtm');
+async.series(tasks, runEverything);
+
