@@ -64,18 +64,16 @@ function spawn(name, arguments, options) {
     process.removeListener('exit', exitHandler);
   });
   process.on('exit', exitHandler);
-  process.once('SIGINT', function() {
-    exitHandler();
-    process.exit();
+  ['SIGINT', 'SIGTERM', 'SIGINT'].forEach(function(signal) {
+    process.once(signal, function() {
+      exitHandler();
+      process.exit();
+    });
   });
   return proc;
 }
 
-
-
-
-
-require('./webapp/master');
+require('virtkick-proxy');
 
 var child_process = require('child_process');
 
