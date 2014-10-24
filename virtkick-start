@@ -64,7 +64,7 @@ function spawn(name, arguments, options) {
     process.removeListener('exit', exitHandler);
   });
   process.on('exit', exitHandler);
-  ['SIGINT', 'SIGTERM', 'SIGINT'].forEach(function(signal) {
+  ['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(function(signal) {
     process.once(signal, function() {
       exitHandler();
       process.exit();
