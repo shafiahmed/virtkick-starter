@@ -29,7 +29,7 @@ Now head off to:
 * https://github.com/virtkick/virtkick-webapp
 * https://github.com/virtkick/virtkick-backend
 
-Setup the `webapp` and `backend` to run on their own.
+Setup the `webapp` and `backend` to run on their own (ruby gems, django setup) and then close them.
 
 Not prepare the starter application with `npm install`, make sure you have Node.JS installed
 
