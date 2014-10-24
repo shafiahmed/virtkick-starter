@@ -31,21 +31,23 @@ Now head off to:
 
 Setup the `webapp` and `backend` to run on their own.
 
-Not prepare the starter application with `npm install`
+Not prepare the starter application with `npm install`, make sure you have Node.JS installed
 
 Now you can start VirtKick with:
 ```
-./virtkick-start
+./virtkick-start -d
 ```
+Run `./virtkick-start -h` to see other options. For example, to switch to production you can do `./virtkick-start -p -a -m` and to switch back to development `./virtkick-start -d -m`
 
 Some environment variables may be set to customize:
 ```
 PORT - to change default listening port
 WORKER_COUNT - to change worker count from default 2
-PATH_TO_PYTHON - if you have python2 in some other place than 'python'
 RAILS_PORT - if you want to force different port on rails
-WEBAPP_PATH - if you want to start webapp from different path than ./webapp
-BACKEND_PATH - if you want to start backend from different path than ./webapp
+WEBAPP_DIR - if you want to start webapp from different path than ./webapp
+BACKEND_DIR - if you want to start backend from different path than ./backend
+ISO_DIR - path to ISO, by default ./ISO
+HDD_DIR - path to HDD, by default ./HDD
 ```
 
 
