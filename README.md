@@ -1,8 +1,7 @@
 # VirtKick. Cloud made easy.
 
-[![GPA](https://img.shields.io/codeclimate/github/virtkick/virtkick-webapp.svg?style=flat-square)](https://codeclimate.com/github/virtkick/virtkick-webapp)
-[![Build status](https://img.shields.io/travis/virtkick/virtkick-webapp.svg?style=flat-square)](https://travis-ci.org/virtkick/virtkick-webapp)
-[![Dependencies status](http://img.shields.io/gemnasium/virtkick/virtkick-webapp.svg?style=flat-square)](https://gemnasium.com/virtkick/virtkick-webapp)
+[![GPA](https://img.shields.io/codeclimate/github/virtkick/virtkick-starter.svg?style=flat-square)](https://codeclimate.com/github/virtkick/virtkick-starter)
+[![Dependencies status](http://img.shields.io/gemnasium/virtkick/virtkick-starter.svg?style=flat-square)](https://gemnasium.com/virtkick/virtkick-starter)
 [![Gratipay](https://img.shields.io/gratipay/virtkick.svg?style=flat-square)](https://gratipay.com/virtkick/)
 
 VirtKick is a simple, open source orchestrator.
