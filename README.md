@@ -18,7 +18,7 @@ Report bugs and feature requests in [virtkick](https://github.com/virtkick/virtk
 
 This repo is supposed to kickstart your virtkick!
 
-** Note this is a heavy work in progress and not yet one click install, do not judge this process, it will be improved, thanks! **
+**Note this is a heavy work in progress and not yet one click install, do not judge this process, it will be improved, thanks!**
 
 
 First pull the submodule repos:
