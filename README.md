@@ -1,43 +1,34 @@
 # VirtKick. Cloud made easy.
 
-[![GPA](https://img.shields.io/codeclimate/github/virtkick/virtkick-webapp.svg?style=flat-square)](https://codeclimate.com/github/virtkick/virtkick-webapp)
-[![Build status](https://img.shields.io/travis/virtkick/virtkick-webapp.svg?style=flat-square)](https://travis-ci.org/virtkick/virtkick-webapp)
-[![Dependencies status](http://img.shields.io/gemnasium/virtkick/virtkick-webapp.svg?style=flat-square)](https://gemnasium.com/virtkick/virtkick-webapp)
-[![Gratipay](https://img.shields.io/gratipay/Nowaker.svg?style=flat-square)](https://gratipay.com/Nowaker/)
+[![GPA](https://img.shields.io/codeclimate/github/virtkick/virtkick-starter.svg?style=flat-square)](https://codeclimate.com/github/virtkick/virtkick-starter)
+[![Dependencies status](http://img.shields.io/gemnasium/virtkick/virtkick-starter.svg?style=flat-square)](https://gemnasium.com/virtkick/virtkick-starter)
+[![Gratipay](https://img.shields.io/gratipay/virtkick.svg?style=flat-square)](https://gratipay.com/virtkick/)
 
 VirtKick is a simple, open source orchestrator.
 Managing virtual machines or Docker containers has never been easier.
 
-That's the VirtKick web application. It provides a user interface and delegates virtualization-related tasks to the backend.
+That's the VirtKick Starter. It will allow you to start using VirtKick with a single click.
+
+Note: this is a heavy work in progress and not yet one-click install. Don't judge - it will be improved. Thanks! :-)
 
 ## Issues
 
 Report bugs and feature requests in [virtkick](https://github.com/virtkick/virtkick) meta-project.
 
-## Startup
+## One time setup
 
-This repo is supposed to kickstart your virtkick!
+1. `git clone --recursive https://github.com/virtkick/virtkick-starter.git`
+2. Perform [one time setup of virtkick-webapp](https://github.com/virtkick/virtkick-webapp#one-time-setup)
+3. Perform [one time setup of virtkick-backend](https://github.com/virtkick/virtkick-backend#one-time-setup)
+4. Install node.js 0.10 or 0.11.14+
+5. `npm install`
 
-**Note this is a heavy work in progress and not yet one click install, do not judge this process, it will be improved, thanks!**
+## Start VirtKick
 
+- Development: `./virtkick-start -dm`
+- Production: `./virtkick-start -pm`
 
-First pull the submodule repos:
-```
-git submodule update --init --recursive
-```
-Now head off to:
-* https://github.com/virtkick/virtkick-webapp
-* https://github.com/virtkick/virtkick-backend
-
-Setup the `webapp` and `backend` to run on their own (ruby gems, django setup) and then close them.
-
-Not prepare the starter application with `npm install`, make sure you have Node.JS installed
-
-Now you can start VirtKick with:
-```
-./virtkick-start -d
-```
-Run `./virtkick-start -h` to see other options. For example, to switch to production you can do `./virtkick-start -p -a -m` and to switch back to development `./virtkick-start -d -m`
+See `./virtkick-start -h` for other options.
 
 Some environment variables may be set to customize:
 ```
@@ -46,8 +37,8 @@ WORKER_COUNT - to change worker count from default 2
 RAILS_PORT - if you want to force different port on rails
 WEBAPP_DIR - if you want to start webapp from different path than ./webapp
 BACKEND_DIR - if you want to start backend from different path than ./backend
-ISO_DIR - path to ISO, by default ./ISO
-HDD_DIR - path to HDD, by default ./HDD
+ISO_DIR - path to ISO, by default ./iso
+HDD_DIR - path to HDD, by default ./hdd
 ```
 
 
