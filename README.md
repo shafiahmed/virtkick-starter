@@ -37,8 +37,8 @@ WORKER_COUNT - to change worker count from default 2
 RAILS_PORT - if you want to force different port on rails
 WEBAPP_DIR - if you want to start webapp from different path than ./webapp
 BACKEND_DIR - if you want to start backend from different path than ./backend
-ISO_DIR - path to ISO, by default ./ISO
-HDD_DIR - path to HDD, by default ./HDD
+ISO_DIR - path to ISO, by default ./iso
+HDD_DIR - path to HDD, by default ./hdd
 ```
 
 

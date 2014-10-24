@@ -47,8 +47,8 @@ env.PORT = env.PORT || 3000;
 env.RAILS_PORT = env.RAILS_PORT || 60000;
 env.RAILS_HOST = "localhost";
 
-env.HDD_DIR = env.HDD_DIR || path.join(BASE_DIR, 'HDD');
-env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'ISO');
+env.HDD_DIR = env.HDD_DIR || path.join(BASE_DIR, 'hdd');
+env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'iso');
 
 mkdirp.sync(env.HDD_DIR);
 mkdirp.sync(env.ISO_DIR);
