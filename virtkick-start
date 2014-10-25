@@ -6,7 +6,7 @@ if ! which virsh &> /dev/null; then
 fi
 export LIBVIRT_VERSION=$(virsh --version)
 
-if ! [ -e webapp ] || ! [ -e backend ];then
+if ! [ -e webapp/README.md ] || ! [ -e backend/README.md ];then
   echo "Pulling backend and webapp submodules"
 	git submodule update --recursive
 fi
