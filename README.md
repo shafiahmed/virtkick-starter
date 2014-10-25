@@ -49,7 +49,7 @@ See [CONTRIBUTING.md](https://github.com/virtkick/virtkick-website/blob/master/C
 
 # Sponsors
 
-- Tip us weekly with Gratipay: [![Donate with Gratipay](https://img.shields.io/gratipay/Nowaker.svg?style=flat-square)](https://gratipay.com/Nowaker/)
+- Tip us weekly with Gratipay: [![Donate with Gratipay](https://img.shields.io/gratipay/virtkick.svg?style=flat-square)](https://gratipay.com/virtkick/)
 - One-time donate with PayPal: [![Donate with PayPal](https://raw.githubusercontent.com/virtkick/virtkick/master/paypal-donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AGF4FPG7JZ7NY&lc=US)
 - Or with Bitcoins: `1Nb7PxyNAKSNc6traXW4NPyPMhJA7PwXf8`
 - [Become a corporate sponsor](https://www.virtkick.io/become-a-sponsor.html).
