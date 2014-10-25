@@ -1,6 +1,11 @@
 #!/bin/sh
 cd $(dirname $0)
 
+if ! which virsh &> /dev/null; then
+  echo "virsh is not available, please install libvirtd"
+fi
+export LIBVIRT_VERSION=$(virsh --version)
+
 if ! [ -e webapp ] || ! [ -e backend ];then
   echo "Pulling backend and webapp submodules"
 	git submodule update --recursive

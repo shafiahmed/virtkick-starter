@@ -6,6 +6,7 @@ if ! [ -e "$PYENV_ROOT" ];then
   pyenv rehash
   git clone https://github.com/yyuu/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv
   pyenv virtualenv 2.7.6 virtkick
+  pip install libvirt-python-$LIBVIRT_VERSION
 fi
 eval "$(pyenv init -)"
 pyenv activate virtkick
