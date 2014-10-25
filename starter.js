@@ -147,8 +147,20 @@ if(argv.i) {
   });
 
   tasks1.push(function(cb) {
-    var migrate = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
-    bindOutput(migrate, 'pip install', cb);
+    async.series([
+      function(cb) {
+        var migrate = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
+        bindOutput(migrate, 'backend:install', cb);
+      },
+      function(cb) {
+        var migrate = spawn(backendDir, 'python2', ['./manage.py', 'syncdb']);
+        bindOutput(migrate, 'backend:syncdb', cb);
+      },
+      function(cb) {
+        var migrate = spawn(backendDir, 'python2', ['./manage.py', 'collectstatic']);
+        bindOutput(migrate, 'backend:collectstatic', cb);
+      }
+    ], cb);
   });
 
 
