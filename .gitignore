@@ -1,0 +1,6 @@
+node_modules
+*.sublime-workspace
+.rvm
+.nvm
+.pyenv
+npm-debug.log

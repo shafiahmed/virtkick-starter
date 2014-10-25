@@ -145,6 +145,13 @@ if(argv.i) {
     var migrate = spawn(webappDir, 'bundle', ['install']);
     bindOutput(migrate, 'install', cb);
   });
+
+  tasks1.push(function(cb) {
+    var migrate = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
+    bindOutput(migrate, 'pip install', cb);
+  });
+
+
 } else if(argv.u) {
   tasks1.push(function(cb) {
     var migrate = spawn(webappDir, 'bundle', ['update']);
