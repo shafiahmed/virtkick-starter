@@ -2,6 +2,8 @@
 set -e
 cd $(dirname $0)
 
+. setup/system.sh
+
 if ! which virsh &> /dev/null; then
   echo "virsh is not available, please install libvirtd"
 fi
