@@ -142,23 +142,23 @@ var serialTasks = [tasks1, tasks2];
 
 if(argv.i) {
   tasks1.push(function(cb) {
-    var migrate = spawn(webappDir, 'bundle', ['install']);
-    bindOutput(migrate, 'install', cb);
+    var proc = spawn(webappDir, 'bundle', ['install']);
+    bindOutput(proc, 'install', cb);
   });
 
   tasks1.push(function(cb) {
     async.series([
       function(cb) {
-        var migrate = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
-        bindOutput(migrate, 'backend:install', cb);
+        var proc = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
+        bindOutput(proc, 'backend:install', cb);
       },
       function(cb) {
-        var migrate = spawn(backendDir, 'python2', ['./manage.py', 'syncdb']);
-        bindOutput(migrate, 'backend:syncdb', cb);
+        var proc = spawn(backendDir, 'python2', ['./manage.py', 'syncdb']);
+        bindOutput(proc, 'backend:syncdb', cb);
       },
       function(cb) {
-        var migrate = spawn(backendDir, 'python2', ['./manage.py', 'collectstatic']);
-        bindOutput(migrate, 'backend:collectstatic', cb);
+        var proc = spawn(backendDir, 'python2', ['./manage.py', 'collectstatic', '--noinput']);
+        bindOutput(proc, 'backend:collectstatic', cb);
       }
     ], cb);
   });
@@ -166,31 +166,31 @@ if(argv.i) {
 
 } else if(argv.u) {
   tasks1.push(function(cb) {
-    var migrate = spawn(webappDir, 'bundle', ['update']);
-    bindOutput(migrate, 'update', cb);
+    var proc = spawn(webappDir, 'bundle', ['update']);
+    bindOutput(proc, 'update', cb);
   });
 }
 
 
 if(argv.m) {
   tasks2.push(function(cb) {
-    var migrate = spawn(webappDir, 'bundle', ['exec', 'rake', 'db:migrate']);
-    bindOutput(migrate, 'migrate', cb);
+    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'db:migrate']);
+    bindOutput(proc, 'proc', cb);
   });
 }
 
 if(argv.c) {
   tasks2.push(function(cb) {
-    var migrate = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:clean']);
-    bindOutput(migrate, 'assets:clean', cb);
+    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:clean']);
+    bindOutput(proc, 'assets:clean', cb);
   });
 }
 
 
 if(argv.a) {
   tasks2.push(function(cb) {
-    var migrate = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:precompile']);
-    bindOutput(migrate, 'assets', cb);
+    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:precompile']);
+    bindOutput(proc, 'assets', cb);
   });
 }
 
