@@ -11,8 +11,11 @@ export LIBVIRT_VERSION=$(virsh --version)
 
 if ! [ -e webapp/README.md ] || ! [ -e backend/README.md ];then
   echo "Pulling backend and webapp submodules"
-	git submodule update --recursive
+  git submodule update --recursive
 fi
+
+export ISO_DIR="$(realpath ~virtkick)/iso"
+export HDD_DIR="$(realpath ~virtkick)/hdd"
 
 . setup/node.sh
 if ! [ -e node_modules ];then
@@ -21,6 +24,9 @@ fi
 . setup/ruby.sh
 
 . setup/python.sh
+
+echo $ISO_DIR
+echo $HDD_DIR
 
 node starter.js $*
 

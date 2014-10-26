@@ -7,6 +7,8 @@ var yargs = require('yargs');
 var async = require('async');
 var extend = require('extend');
 
+process.setMaxListeners(100);
+
 var argv = yargs
 .alias('h', 'help')
 .describe('h', 'show help')
@@ -51,13 +53,11 @@ env.RAILS_HOST = "localhost";
 env.HDD_DIR = env.HDD_DIR || path.join(BASE_DIR, 'hdd');
 env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'iso');
 
-mkdirp.sync(env.HDD_DIR);
-mkdirp.sync(env.ISO_DIR);
 
-function spawn(cwd, name, arguments, options) {
+function spawn(cwd, command, options) {
   chSpawn = child_process.spawn;
 
-  var proc = chSpawn(name, arguments, extend({}, {
+  var proc = chSpawn('script', ['a', '/dev/null', '-q', '-c', command], extend({}, {
     env: env,
     cwd: cwd
   }, options))
@@ -110,13 +110,13 @@ function bindOutput(proc, label, exitCb) {
 
 function runEverything() {
 
-  var rails = spawn(webappDir, 'bundle', ['exec', 'rails', 's', '-p', env.RAILS_PORT]);
+  var rails = spawn(webappDir, 'bundle exec rails s -p ' + env.RAILS_PORT);
 
   bindOutput(rails, 'rails', forceExit);
 
   var workerN = 0;
   function createWorker() {
-    var worker = spawn(webappDir, 'bundle', ['exec', 'rake', 'jobs:work']);
+    var worker = spawn(webappDir, 'bundle exec rake jobs:work');
     bindOutput(worker, 'work' + workerN, forceExit);
     workerN += 1;
     return worker;
@@ -130,7 +130,7 @@ function runEverything() {
   }
 
 
-  var backend = spawn(backendDir, env.PATH_TO_PYTHON || 'python2', ['manage.py', 'runserver']);
+  var backend = spawn(backendDir, 'python2 manage.py runserver');
   bindOutput(backend, 'virtm', forceExit);
 }
 
@@ -142,22 +142,22 @@ var serialTasks = [tasks1, tasks2];
 
 if(argv.i) {
   tasks1.push(function(cb) {
-    var proc = spawn(webappDir, 'bundle', ['install']);
+    var proc = spawn(webappDir, 'bundle install');
     bindOutput(proc, 'install', cb);
   });
 
   tasks1.push(function(cb) {
     async.series([
       function(cb) {
-        var proc = spawn(backendDir, 'pip', ['install', '-r', 'requirements.txt']);
+        var proc = spawn(backendDir, 'pip install -r requirements.txt');
         bindOutput(proc, 'backend:install', cb);
       },
       function(cb) {
-        var proc = spawn(backendDir, 'python2', ['./manage.py', 'syncdb']);
+        var proc = spawn(backendDir, 'python2 ./manage.py syncdb --noinput');
         bindOutput(proc, 'backend:syncdb', cb);
       },
       function(cb) {
-        var proc = spawn(backendDir, 'python2', ['./manage.py', 'collectstatic', '--noinput']);
+        var proc = spawn(backendDir, 'python2 ./manage.py collectstatic', '--noinput');
         bindOutput(proc, 'backend:collectstatic', cb);
       }
     ], cb);
@@ -194,6 +194,8 @@ if(argv.a) {
   });
 }
 
+var yaml = require('js-yaml');
+var fs = require('fs');
 
 async.eachSeries(serialTasks, function(tasks, cb) {
   async.parallel(tasks, cb);
@@ -202,7 +204,36 @@ async.eachSeries(serialTasks, function(tasks, cb) {
     return console.log("One of required tasks has failed")
   }
   runEverything();
+  downloadIsos();
 });
 
+function downloadIsos() {
+  if(fs.existsSync(path.join(__dirname, ".isos-done"))) {
+    console.log("All isos are downloaded, delete .isos_done to redo")
+    return;
+  }
+  console.log("Starting download of ISO files")
+
+  var isos = yaml.safeLoad(fs.readFileSync(path.join(__dirname, './webapp/app/models/plans/iso_images.yml')), {});
+
+  async.eachLimit(isos, 4, function(iso, cb) {
+
+    console.log('[wget:' +iso.id+'] Starting download of iso: '+ iso.file);
+    var wget = spawn("./", "ssh virtkick@localhost wget -q -c -P iso \"" + iso.mirrors[0] + "\"");
+//    var wget = spawn("./", "ssh virtkick@localhost curl -s -C - -o \"" + iso.file + "\" \"" + iso.mirrors[0] + "\"")
+;    bindOutput(wget, '[wget:' +iso.id+']', cb);
+
+  }, function(err) {
+    if(err) {
+      console.error("Not all isos could have been downloaded, will retry on next start");
+      return;
+    }
+    console.log("All isos downloaded");
+    fs.writeFileSync(path.join(__dirname, ".isos-done"), "DONE");
+  });
+  
+
+
+}
 
 
