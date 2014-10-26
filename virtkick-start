@@ -18,8 +18,14 @@ export ISO_DIR="$(realpath ~virtkick)/iso"
 export HDD_DIR="$(realpath ~virtkick)/hdd"
 
 . setup/node.sh
+
+if ! [ -e node_modules/.done ];then
+  rm -rf node_modules
+fi
+
 if ! [ -e node_modules ];then
-npm install
+  npm install
+  touch node_modules/.done
 fi
 . setup/ruby.sh
 
