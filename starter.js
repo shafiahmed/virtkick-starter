@@ -158,7 +158,7 @@ if(argv.i) {
         bindOutput(proc, 'backend:syncdb', cb);
       },
       function(cb) {
-        var proc = spawn(backendDir, 'python2 ./manage.py collectstatic', '--noinput');
+        var proc = spawn(backendDir, 'python2 ./manage.py collectstatic --noinput');
         bindOutput(proc, 'backend:collectstatic', cb);
       }
     ], cb);
