@@ -58,7 +58,7 @@ function spawn(cwd, command, options) {
   chSpawn = child_process.spawn;
 
   var proc =
-    chSpawn('script', ['a', '/dev/null', '-q', '-c', command], extend({}, {
+    chSpawn('script', ['/dev/null', '-q', '-c', command], extend({}, {
     env: env,
     cwd: cwd
   }, options))
