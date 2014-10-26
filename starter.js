@@ -111,7 +111,7 @@ function bindOutput(proc, label, exitCb) {
 
 function runEverything() {
 
-  var rails = spawn(webappDir, 'bundle exec rails s -p ' + env.RAILS_PORT);
+  var rails = spawn(webappDir, 'bundle exec ./bin/spring rails s -p ' + env.RAILS_PORT);
 
   bindOutput(rails, 'rails', forceExit);
 
@@ -167,7 +167,7 @@ if(argv.i) {
 
 } else if(argv.u) {
   tasks1.push(function(cb) {
-    var proc = spawn(webappDir, 'bundle', ['update']);
+    var proc = spawn(webappDir, 'bundle update');
     bindOutput(proc, 'update', cb);
   });
 }
@@ -175,14 +175,14 @@ if(argv.i) {
 
 if(argv.m) {
   tasks2.push(function(cb) {
-    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'db:migrate']);
+    var proc = spawn(webappDir, 'bundle exec ./bin/spring rake db:migrate');
     bindOutput(proc, 'proc', cb);
   });
 }
 
 if(argv.c) {
   tasks2.push(function(cb) {
-    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:clean']);
+    var proc = spawn(webappDir, 'bundle exec ./bin/spring rake assets:clean');
     bindOutput(proc, 'assets:clean', cb);
   });
 }
@@ -190,7 +190,7 @@ if(argv.c) {
 
 if(argv.a) {
   tasks2.push(function(cb) {
-    var proc = spawn(webappDir, 'bundle', ['exec', 'rake', 'assets:precompile']);
+    var proc = spawn(webappDir, 'bundle exec ./bin/spring rake assets:precompile');
     bindOutput(proc, 'assets', cb);
   });
 }

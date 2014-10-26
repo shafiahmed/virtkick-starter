@@ -31,9 +31,6 @@ fi
 
 . setup/python.sh
 
-echo $ISO_DIR
-echo $HDD_DIR
-
 node starter.js $*
 
 # Remember error
