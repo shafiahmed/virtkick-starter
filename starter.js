@@ -57,7 +57,8 @@ env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'iso');
 function spawn(cwd, command, options) {
   chSpawn = child_process.spawn;
 
-  var proc = chSpawn('script', ['a', '/dev/null', '-q', '-c', command], extend({}, {
+  var proc =
+    chSpawn('script', ['a', '/dev/null', '-q', '-c', command], extend({}, {
     env: env,
     cwd: cwd
   }, options))
