@@ -218,6 +218,10 @@ function downloadIsos() {
   var isos = yaml.safeLoad(fs.readFileSync(path.join(__dirname, './webapp/app/models/plans/iso_images.yml')), {});
 
   async.eachLimit(isos, 4, function(iso, cb) {
+    if(!iso.mirrors) {
+      console.log("Iso", iso.name, "does not have mirrors");
+      return cb();
+    }
 
     console.log('[wget:' +iso.id+'] Starting download of iso: '+ iso.file);
     var wget = spawn("./", "ssh -o \"StrictHostKeyChecking no\" virtkick@localhost wget -q -c -P iso \"" + iso.mirrors[0] + "\"");

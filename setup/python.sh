@@ -23,6 +23,7 @@ if ! [ -e "$PYENV_ROOT" ];then
 	python setup.py install
 	cd ../../..
 	pip install libvirt-python==$LIBVIRT_VERSION
+	pip install -r requirements.txt
 	touch "$PYENV_ROOT/installed"
 else
 	eval "$(pyenv init -)"
