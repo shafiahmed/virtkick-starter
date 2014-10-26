@@ -210,7 +210,7 @@ async.eachSeries(serialTasks, function(tasks, cb) {
 
 function downloadIsos() {
   if(fs.existsSync(path.join(__dirname, ".isos-done"))) {
-    console.log("All isos are downloaded, delete .isos_done to redo")
+    console.log("All isos are downloaded, delete .isos-done to redo")
     return;
   }
   console.log("Starting download of ISO files")
@@ -226,7 +226,7 @@ function downloadIsos() {
     console.log('[wget:' +iso.id+'] Starting download of iso: '+ iso.file);
     var wget = spawn("./", "ssh -o \"StrictHostKeyChecking no\" virtkick@localhost wget -q -c -P iso \"" + iso.mirrors[0] + "\"");
 //    var wget = spawn("./", "ssh virtkick@localhost curl -s -C - -o \"" + iso.file + "\" \"" + iso.mirrors[0] + "\"")
-;    bindOutput(wget, '[wget:' +iso.id+']', cb);
+    bindOutput(wget, '[wget:' +iso.id+']', cb);
 
   }, function(err) {
     if(err) {
