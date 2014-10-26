@@ -1,4 +1,4 @@
-# VirtKick. Cloud made easy.
+# VirtKick. Take Cloud Back.
 
 [![GPA](https://img.shields.io/codeclimate/github/virtkick/virtkick-starter.svg?style=flat-square)](https://codeclimate.com/github/virtkick/virtkick-starter)
 [![Dependencies status](http://img.shields.io/gemnasium/virtkick/virtkick-starter.svg?style=flat-square)](https://gemnasium.com/virtkick/virtkick-starter)
@@ -9,38 +9,29 @@ Managing virtual machines or Docker containers has never been easier.
 
 That's the VirtKick Starter. It will allow you to start using VirtKick with a single click.
 
-Note: this is a heavy work in progress and not yet one-click install. Don't judge - it will be improved. Thanks! :-)
+This is a heavy work in progress and not yet one-click install. Don't judge - it will be improved! Please [report an issue](https://github.com/virtkick/virtkick) if you face any problems. We need your help to make it bullet-proof. Thanks! :-)
 
-## Issues
+## First run
 
-Report bugs and feature requests in [virtkick](https://github.com/virtkick/virtkick) meta-project.
+1. `git clone https://github.com/virtkick/virtkick-starter.git`
+2. `cd virtkick-starter`
+3. `./virtkick-start -dim`
 
-## One time setup
+Your browser automatically opens [http://localhost:3000/](http://localhost:3000/). Happy hacking!
 
-1. `git clone --recursive https://github.com/virtkick/virtkick-starter.git`
-2. Perform [one time setup of virtkick-webapp](https://github.com/virtkick/virtkick-webapp#one-time-setup)
-3. Perform [one time setup of virtkick-backend](https://github.com/virtkick/virtkick-backend#one-time-setup)
-4. Install node.js 0.10 or 0.11.14+
-5. `npm install`
+## Next runs
 
-## Start VirtKick
+1. `./virtkick-start -dm`
 
-- Development: `./virtkick-start -dm`
-- Production: `./virtkick-start -pm`
+## Hacker Zone™
 
 See `./virtkick-start -h` for other options.
 
 Some environment variables may be set to customize:
-```
-PORT - to change default listening port
-WORKER_COUNT - to change worker count from default 2
-RAILS_PORT - if you want to force different port on rails
-WEBAPP_DIR - if you want to start webapp from different path than ./webapp
-BACKEND_DIR - if you want to start backend from different path than ./backend
-ISO_DIR - path to ISO, by default ./iso
-HDD_DIR - path to HDD, by default ./hdd
-```
 
+- `PORT` - reverse proxy listen port (defaults to 3000)
+- `RAILS_PORT` - Rails web application listen port (defaults to 60000)
+- `WORKER_COUNT` - number of background jobs workers (defaults to 2)
 
 ## Contributing
 
