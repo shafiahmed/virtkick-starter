@@ -1,7 +1,7 @@
 #!/bin/sh
 if ! [ -e .system-setup ];then
 	if ! [ -e ~/.ssh/id_rsa.pub ];then
-		ssh-key-gen -b 4096
+		ssh-keygen -b 4096
 	fi
 	echo 'I am about to create user "virtkick" in group "kvm" and add your public ssh key to allow passwordless login'
 	sudo bash -c "
