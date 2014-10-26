@@ -117,7 +117,7 @@ function runEverything() {
 
   var workerN = 0;
   function createWorker() {
-    var worker = spawn(webappDir, 'bundle exec rake jobs:work');
+    var worker = spawn(webappDir, 'bundle exec ./bin/spring rake jobs:work');
     bindOutput(worker, 'work' + workerN, forceExit);
     workerN += 1;
     return worker;
