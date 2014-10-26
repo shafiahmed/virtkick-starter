@@ -11,7 +11,7 @@ export LIBVIRT_VERSION=$(virsh --version)
 
 if ! [ -e webapp/README.md ] || ! [ -e backend/README.md ];then
   echo "Pulling backend and webapp submodules"
-  git submodule update --recursive
+  git submodule update --init --recursive
 fi
 
 export ISO_DIR="$(realpath ~virtkick)/iso"
