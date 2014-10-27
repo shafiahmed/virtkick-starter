@@ -57,8 +57,10 @@ env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'iso');
 function spawn(cwd, command, options) {
   chSpawn = child_process.spawn;
 
+  command = command.replace('./bin/spring ', '');
+
   var proc =
-    chSpawn('script', ['/dev/null', '-q', '-c', command], extend({}, {
+    chSpawn('script', ['/dev/null', '-e', '-q', '-c', command], extend({}, {
     env: env,
     cwd: cwd
   }, options))
@@ -205,7 +207,9 @@ async.eachSeries(serialTasks, function(tasks, cb) {
     return console.log("One of required tasks has failed")
   }
   runEverything();
-  downloadIsos();
+  if(!process.env.NO_DOWNLOAD) {
+    downloadIsos();
+  }
 });
 
 function downloadIsos() {

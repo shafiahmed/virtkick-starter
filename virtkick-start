@@ -16,6 +16,8 @@ fi
 export ISO_DIR="$(readlink -f ~virtkick)/iso"
 export HDD_DIR="$(readlink -f ~virtkick)/hdd"
 
+. setup/ruby.sh
+
 . setup/node.sh
 
 if ! [ -e node_modules/.done ];then
@@ -26,7 +28,8 @@ if ! [ -e node_modules ];then
   npm install
   touch node_modules/.done
 fi
-. setup/ruby.sh
+
+which pip > /dev/null || (echo "Command \"pip\" not found, please install python-pip or equivalent\"" && exit 1)
 
 #. setup/python.sh
 
