@@ -2,7 +2,7 @@
 if ! [ -e .system-setup ];then
   # assure make
   if ! [ -e ~/.ssh/id_rsa.pub ];then
-    cat /dev/zero > ssh-keygen -b 4096 -q -N ""
+    ssh-keygen -b 4096 -q -N '' < /dev/zero
   fi
   echo 'I am about to create user "virtkick" in group "kvm" and add your public ssh key to allow passwordless login'
   sudo bash -c "
