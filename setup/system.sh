@@ -2,8 +2,12 @@
 if ! [ -e .system-setup ];then
   # assure make
   if ! [ -e ~/.ssh/id_rsa.pub ];then
+<<<<<<< HEAD
     mkdir -p ~/.ssh
     ssh-keygen -b 4096 -q -N '' -f ~/.ssh/id_rsa
+=======
+    ssh-keygen -b 4096 -q -N '' < /dev/zero
+>>>>>>> 99899be... SSH key doesn't generate
   fi
   echo 'I am about to create user "virtkick" in group "kvm" and add your public ssh key to allow passwordless login'
   sudo bash -c '
