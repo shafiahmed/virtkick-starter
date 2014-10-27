@@ -150,7 +150,7 @@ if(argv.i) {
   tasks1.push(function(cb) {
     async.series([
       function(cb) {
-        var proc = spawn(backendDir, 'pip install -r requirements.txt');
+        var proc = spawn(backendDir, 'pip install --user -r requirements.txt');
         bindOutput(proc, 'backend:install', cb);
       },
       function(cb) {
