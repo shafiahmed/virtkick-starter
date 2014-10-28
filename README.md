@@ -13,7 +13,8 @@ This is a heavy work in progress and not yet one-click install. Don't judge - it
 
 ## Distro specific prerequisites
 
-### Ubuntu 14.04 Server
+### Ubuntu 14.04
+
 ```
 sudo apt-get install openssh-server git qemu-kvm libvirt-bin python-pip python-libvirt python-libxml2
 ```
