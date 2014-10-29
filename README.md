@@ -32,7 +32,7 @@ Over time we plan to add streamlined installation for other distros as well. Gen
 
 First start may take a couple of minutes due to download of various dependencies. It will ask for root password to setup things in `setup/system.sh`, as you may inspect. During run it will also download iso images to `/home/virtkick/iso`, make sure you have enough disk space left (~25 GB).
 
-Your browser automatically opens [http://localhost:3000/](http://localhost:3000/). Happy hacking!
+After everything is set up, open up  [http://localhost:3000/](http://localhost:3000/) and try out virtkick by creating a virtual machine or two. :) Happy hacking!
 
 ## Next runs
 
