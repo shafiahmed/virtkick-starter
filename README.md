@@ -33,6 +33,11 @@ Your browser automatically opens [http://localhost:3000/](http://localhost:3000/
 
 1. `./virtkick-start -dm`
 
+## Upgrading
+
+1. `git pull`
+2. `./virtkick-start -dim`
+
 ## Hacker Zone™
 
 See `./virtkick-start -h` for other options.
