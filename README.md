@@ -15,9 +15,14 @@ This is a heavy work in progress and not yet one-click install. Don't judge - it
 
 ### Ubuntu 14.04
 
+Most things are already handled by `virtkick-start`, you only need Git.
 ```
-sudo apt-get install openssh-server git qemu-kvm libvirt-bin python-pip python-libvirt python-libxml2
+sudo apt-get install git
 ```
+
+### Other
+
+Over time we plan to add streamlined installation for other distros as well. General rule of thumb is to have a development environment (make, g++), libvirt and qemu. `virtkick-starter` will try to setup rest by itself.
 
 ## First run
 
@@ -27,7 +32,7 @@ sudo apt-get install openssh-server git qemu-kvm libvirt-bin python-pip python-l
 
 First start may take a couple of minutes due to download of various dependencies. It will ask for root password to setup things in `setup/system.sh`, as you may inspect. During run it will also download iso images to `/home/virtkick/iso`, make sure you have enough disk space left (~25 GB).
 
-Your browser automatically opens [http://localhost:3000/](http://localhost:3000/). Happy hacking!
+After everything is set up, open up  [http://localhost:3000/](http://localhost:3000/) and try out virtkick by creating a virtual machine or two. :) Happy hacking!
 
 ## Next runs
 
