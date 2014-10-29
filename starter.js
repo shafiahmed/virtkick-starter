@@ -53,17 +53,52 @@ env.RAILS_HOST = "localhost";
 env.HDD_DIR = env.HDD_DIR || path.join(BASE_DIR, 'hdd');
 env.ISO_DIR = env.ISO_DIR || path.join(BASE_DIR, 'iso');
 
+var workingScriptCommand = false;
+
+function checkScript(cb) {
+  var output = child_process.spawn('script', ['--help']);
+  var allData = "";
+  output.stdout.on('data', function(data) {
+    allData += data.toString('utf8');
+  });
+  output.stderr.on('data', function(data) {
+    allData += data.toString('utf8');
+  });
+  output.once('exit', function() {
+    setTimeout(function() {
+      allData.split(/\n/).forEach(function(line) {
+        if(line.match(/-e/) && line.match(/--return/))
+          workingScriptCommand = true;
+      });;
+      cb();
+    }, 0);
+  });
+  output.once('error', function() {
+    cb();
+  });
+
+}
+
 
 function spawn(cwd, command, options) {
   chSpawn = child_process.spawn;
 
   command = command.replace('./bin/spring ', '');
 
-  var proc =
-    chSpawn('script', ['/dev/null', '-e', '-q', '-c', command], extend({}, {
-    env: env,
-    cwd: cwd
-  }, options))
+  var proc;
+
+  if(workingScriptCommand) {
+    proc =
+      chSpawn('script', ['/dev/null', '-e', '-q', '-c', command], extend({}, {
+      env: env,
+      cwd: cwd
+    }, options));
+  } else {
+    proc = chSpawn('bash', ['-c', command], extend({}, {
+      env: env,
+      cwd: cwd
+    }, options));
+  }
   var exitHandler = function() {
     proc.kill('SIGKILL');
   };
@@ -140,7 +175,7 @@ function runEverything() {
 var tasks1 = [];
 var tasks2 = [];
 
-var serialTasks = [tasks1, tasks2];
+var serialTasks = [[checkScript], tasks1, tasks2];
 
 
 if(argv.i) {
