@@ -1,12 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 cd $(dirname $0)
 
 . setup/system.sh
 
-if ! which virsh &> /dev/null; then
-  echo "virsh is not available, please install libvirtd"
-fi
+which virsh > /dev/null # should fail and exit script in case of missing
+
 export LIBVIRT_VERSION=$(virsh --version)
 
 if ! [ -e webapp/README.md ] || ! [ -e backend/README.md ];then
@@ -14,8 +13,10 @@ if ! [ -e webapp/README.md ] || ! [ -e backend/README.md ];then
   git submodule update --init --recursive
 fi
 
-export ISO_DIR="$(realpath ~virtkick)/iso"
-export HDD_DIR="$(realpath ~virtkick)/hdd"
+export ISO_DIR="$(readlink -f ~virtkick)/iso"
+export HDD_DIR="$(readlink -f ~virtkick)/hdd"
+
+. setup/ruby.sh
 
 . setup/node.sh
 
@@ -27,9 +28,10 @@ if ! [ -e node_modules ];then
   npm install
   touch node_modules/.done
 fi
-. setup/ruby.sh
 
-. setup/python.sh
+which pip > /dev/null || (echo "Command \"pip\" not found, please install python-pip or equivalent\"" && exit 1)
+
+#. setup/python.sh
 
 node starter.js $*
 

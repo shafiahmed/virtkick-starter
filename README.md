@@ -11,11 +11,21 @@ That's the VirtKick Starter. It will allow you to start using VirtKick with a si
 
 This is a heavy work in progress and not yet one-click install. Don't judge - it will be improved! Please [report an issue](https://github.com/virtkick/virtkick) if you face any problems. We need your help to make it bullet-proof. Thanks! :-)
 
+## Distro specific prerequisites
+
+### Ubuntu 14.04
+
+```
+sudo apt-get install openssh-server git qemu-kvm libvirt-bin python-pip python-libvirt python-libxml2
+```
+
 ## First run
 
 1. `git clone https://github.com/virtkick/virtkick-starter.git`
 2. `cd virtkick-starter`
 3. `./virtkick-start -dim`
+
+First start may take a couple of minutes due to download of various dependencies. It will ask for root password to setup things in `setup/system.sh`, as you may inspect. During run it will also download iso images to `/home/virtkick/iso`, make sure you have enough disk space left (~25 GB).
 
 Your browser automatically opens [http://localhost:3000/](http://localhost:3000/). Happy hacking!
 
@@ -32,6 +42,7 @@ Some environment variables may be set to customize:
 - `PORT` - reverse proxy listen port (defaults to 3000)
 - `RAILS_PORT` - Rails web application listen port (defaults to 60000)
 - `WORKER_COUNT` - number of background jobs workers (defaults to 2)
+- `NO_DOWNLOAD` - skip download of iso files to `/home/virtkick/iso`
 
 ## Contributing
 
