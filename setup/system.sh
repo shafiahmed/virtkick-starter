@@ -7,6 +7,11 @@ if ! [ -e .system-setup ];then
   fi
   echo 'I am about to create user "virtkick" in group "kvm" and add your public ssh key to allow passwordless login'
   sudo bash -c '
+  if which apt-get &> /dev/null;then
+    echo "Detected apt-get based system, trying to auto install required packages"
+    apt-get -y install openssh-server git qemu-kvm libvirt-bin python-pip python-libvirt python-libxml2
+    sleep 1 # give some time for virtkick to start
+  fi
   if ! [ -e /var/run/libvirt/libvirt-sock ];then
     echo "Cannot find /var/run/libvirt/libvirt-sock, please install libvirt" && exit 1
   fi;

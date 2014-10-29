@@ -1,7 +1,5 @@
 export RVM_DIR="$(pwd)/.rvm"
 
-echo $RVM_DIR
-
 if ! [ -e "$RVM_DIR/installed" ];then
   rm -rf "$RVM_DIR"
 fi
@@ -21,7 +19,7 @@ else
 	. .rvm/scripts/rvm
 	export PATH="$RVM_DIR/bin:$PATH"
 fi
-which bundle
+which bundle > /dev/null
 
 
 
