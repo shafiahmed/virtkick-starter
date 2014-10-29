@@ -15,9 +15,14 @@ This is a heavy work in progress and not yet one-click install. Don't judge - it
 
 ### Ubuntu 14.04
 
+Most things are already handled by `virtkick-start`, you only need Git.
 ```
-sudo apt-get install openssh-server git qemu-kvm libvirt-bin python-pip python-libvirt python-libxml2
+sudo apt-get install git
 ```
+
+### Other
+
+Over time we plan to add streamlined installation for other distros as well. General rule of thumb is to have a development environment (make, g++), libvirt and qemu. `virtkick-starter` will try to setup rest by itself.
 
 ## First run
 
